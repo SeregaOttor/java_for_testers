@@ -1,6 +1,6 @@
 package ru.ssh.geometry.figures;
 
-public class Rectangle {
+public record Rectangle(double a, double b) {
     public static void printRectargleArea(double a, double b) {
         var text = String.format("Площадь прямоугольника со сторонами %f и %f = %f", a, b, rectangleArea(a, b));
         System.out.println(text);
