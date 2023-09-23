@@ -1,5 +1,7 @@
 package ru.ssh.geometry.figures;
 
+import java.util.Objects;
+
 public record Rectangle(double a, double b) {
     public Rectangle {
         if (a < 0||b < 0){
@@ -14,5 +16,20 @@ public record Rectangle(double a, double b) {
 
     private static double rectangleArea(double a, double b) {
         return a * b;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Rectangle rectangle = (Rectangle) o;
+        return (Double.compare(this.a, rectangle.a) == 0 && Double.compare(this.b, rectangle.b) == 0)
+                ||(Double.compare(this.b, rectangle.a) == 0 && Double.compare(this.a, rectangle.b) == 0);
+    }
+
+    @Override
+    public int hashCode() {
+        //return Objects.hash(a, b);
+        return 1;//Если не нужна оптимизация
     }
 }
