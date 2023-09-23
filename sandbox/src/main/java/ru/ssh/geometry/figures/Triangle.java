@@ -8,6 +8,15 @@ public class Triangle {
         this.a = a;
         this.b = b;
         this.c = c;
+        /*if (a < 0||b < 0||c < 0||(a+b)<c||(a+c)<b||(b+c)<a){ //То же рабочее но возвращается одно сообщение
+            throw new IllegalArgumentException("Triangle side should be not-negative");
+        }*/
+        if (a < 0||b < 0||c < 0){
+            throw new IllegalArgumentException("Triangle side should be not-negative");
+        }
+        if ((a+b)<c||(a+c)<b||(b+c)<a){
+            throw new IllegalArgumentException("Violating Triangle inequality");
+        }
     }
     public static void printTrianglePerimetr(Triangle t) {
         String text = String.format("Периметр треугольника со сторонами %f, %f и %f = %f", t.a, t.b, t.c, t.trianglePerimetr());

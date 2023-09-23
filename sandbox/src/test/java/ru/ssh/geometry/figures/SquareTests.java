@@ -27,6 +27,5 @@ public class SquareTests {
     } catch (IllegalArgumentException exception) {
             //ok
         }
-
-        }
+    }
 }
