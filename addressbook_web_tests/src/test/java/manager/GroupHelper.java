@@ -19,6 +19,10 @@ public class GroupHelper extends HelperBase{
         openGroupsPage();
         return manager.isElementPresent(By.name("selected[]"));
     }
+    public boolean isGroupPresenty() {
+        openGroupsPage();
+        return manager.isElementPresent(By.xpath("//input[@title=\'Select (groups name)\']"));
+    }
 
     public void createGroup(GroupData group) {
         openGroupsPage();

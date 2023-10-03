@@ -8,7 +8,7 @@ public class GroupCreationTests extends TestBase{
     public void canCreateGroup() {
         app.groups().createGroup(new GroupData("groups name", "group header", "group footer"));
     }
-
+/* Убрал что бы после запуска всех тестов ничего не осталось
     @Test
     public void canCreateGroupWithEmptyName() {
         app.groups().createGroup(new GroupData("", "", ""));
@@ -18,4 +18,6 @@ public class GroupCreationTests extends TestBase{
     public void canCreateGroupWithNameOnly() {
         app.groups().createGroup(new GroupData().withName("some name"));
     }
+
+ */
 }
