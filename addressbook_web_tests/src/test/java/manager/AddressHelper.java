@@ -106,4 +106,25 @@ public class AddressHelper extends HelperBase{
     }
 
 
+    public int getCount() {
+        openAddressPage();
+        return manager.driver.findElements(By.name("selected[]")).size();
+        //return manager.driver.findElement(By.xpath("//span[@id="search_count"]"));
+
+    }
+    public void removeAllAddress() {
+        openAddressPage();
+        massSelectAddress();
+        removeSelectedAddress();
+    }
+
+    private void selectAllAddress() {//на случай если надо несколько
+        var checkboxes = manager.driver.findElements(By.name("selected[]"));
+        for (var checkbox : checkboxes) {
+            checkbox.click();
+        }
+    }
+    private void massSelectAddress() {
+        click(By.xpath("//input[@id=\'MassCB\']"));
+    }
 }
