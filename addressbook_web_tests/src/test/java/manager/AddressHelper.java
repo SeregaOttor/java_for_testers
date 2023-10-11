@@ -1,8 +1,12 @@
 package manager;
 
 import model.AddressData;
+import model.GroupData;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AddressHelper extends HelperBase{
     public AddressHelper(ApplicationManager manager){
@@ -23,18 +27,19 @@ public class AddressHelper extends HelperBase{
         //manager.driver.findElement(By.linkText("Logout")).click();
     }
 
-    public void removeAddress() {
+    public void removeAddress(AddressData address) {
         openAddressPage();
-        selectAddress();
+        selectAddress(address);
         removeSelectedAddress();
     }
 
     private void openAddressPage(){
         click(By.linkText("home"));
     }
-    private void selectAddress() {
+    private void selectAddress(AddressData address) {
         //click(By.name("selected[]"));
-        manager.driver.findElement(By.xpath("//input[@title=\'Select (First name Last name)\']")).click();
+        //manager.driver.findElement(By.xpath("//input[@title=\'Select (First name Last name)\']")).click();
+        click(By.cssSelector(String.format("input[value='%s']", address.id())));
     }
     private void removeSelectedAddress() {
         manager.driver.findElement(By.xpath("//input[@value=\'Delete\']")).click();
@@ -127,4 +132,38 @@ public class AddressHelper extends HelperBase{
     private void massSelectAddress() {
         click(By.xpath("//input[@id=\'MassCB\']"));
     }
+
+    public List<AddressData> getList() {
+        openAddressPage();
+        var address = new ArrayList<AddressData>();
+        var tds = manager.driver.findElements(By.xpath("//tr[@name=\'entry\']"));
+        for (var td : tds) {
+            //var last = td.getText();
+            //var first = td.getText();
+            //var last = td.findElement(By.cssSelector("tr.td[2]")).getText();
+            //var first = td.findElement(By.cssSelector("tr.td[3]")).getText();
+            var chackbox = td.findElement(By.name("selected[]"));
+            var id = chackbox.getAttribute("value");
+            var last = td.findElement(By.xpath("td[2]")).getText();
+            var first = td.findElement(By.xpath("td[3]")).getText();
+            address.add(new AddressData().withId(id).withLast(last).withFirst(first));
+        }
+        return address;
+    }
+    public void modifyAddress(AddressData address,AddressData modifiedAddress) {
+        openAddressPage();
+        selectAddress(address);
+        initAddressModification();
+        nameForm(modifiedAddress);
+        submitAddressModification();
+        returnToAddressPage();
+    }
+
+    private void submitAddressModification() {
+        click(By.name("update"));
+    }
+    private void initAddressModification() {
+        click(By.xpath("//img[@title=\'Edit\']"));
+    }
 }
+

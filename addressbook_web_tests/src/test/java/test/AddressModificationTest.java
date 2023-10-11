@@ -6,12 +6,12 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Random;
 
-public class AddressRemovalTests extends TestBase{
-
+public class AddressModificationTest extends TestBase{
     @Test
-    public void canRemoveAddress() {
+    void canAddressGroup() {
         if (app.address().getCount() == 0){
             if (!app.groups().isGroupPresenty()){
                 app.groups().createGroup(new GroupData("", "groups name", "group header", "group footer"));
@@ -20,22 +20,16 @@ public class AddressRemovalTests extends TestBase{
         var oldAddress = app.address().getList();
         var rnd = new Random();
         var index = rnd.nextInt(oldAddress.size());
-        app.address().removeAddress(oldAddress.get(index));
+        var testData = new AddressData().withLast("Modified name");
+        app.address().modifyAddress(oldAddress.get(index), testData);
         var newAddress = app.address().getList();
         var expectedList = new ArrayList<>(oldAddress);
-        expectedList.remove(index);
-        Assertions.assertEquals(newAddress.size(), oldAddress.size()-1);
+        expectedList.set(index, testData.withId(oldAddress.get(index).id()));
+        Comparator<AddressData> compareById = (o1, o2) -> {
+            return Integer.compare(Integer.parseInt(o1.id()), Integer.parseInt(o2.id()));
+        };
+        newAddress.sort(compareById);
+        expectedList.sort(compareById);
+        Assertions.assertEquals(newAddress, expectedList);
     }
-
-    @Test
-    public void canRemoveAllAddressAtOnce() {
-        if (app.address().getCount() == 0){
-            if (!app.groups().isGroupPresenty()){
-                app.groups().createGroup(new GroupData("", "groups name", "group header", "group footer"));
-            }app.address().createAddress(new AddressData("","First name", "Middle name", "Last name", "Nickname"));
-        }
-        app.address().removeAllAddress();
-        Assertions.assertEquals(0, app.address().getCount());
-    }
-
 }
