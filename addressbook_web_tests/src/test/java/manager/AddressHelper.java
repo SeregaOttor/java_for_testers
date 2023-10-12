@@ -152,8 +152,8 @@ public class AddressHelper extends HelperBase{
     }
     public void modifyAddress(AddressData address,AddressData modifiedAddress) {
         openAddressPage();
-        selectAddress(address);
-        initAddressModification();
+        //selectAddress(address); не требуется так как едит не зависит от выбраной галки
+        initAddressModification(address);
         nameForm(modifiedAddress);
         submitAddressModification();
         returnToAddressPage();
@@ -162,8 +162,9 @@ public class AddressHelper extends HelperBase{
     private void submitAddressModification() {
         click(By.name("update"));
     }
-    private void initAddressModification() {
-        click(By.xpath("//img[@title=\'Edit\']"));
+    private void initAddressModification(AddressData address) {
+        click(By.cssSelector(String.format("a[href=\'edit.php?id=%s\']", address.id())));
+        //click(By.xpath("//img[@title=\'Edit\']"));
     }
 }
 
