@@ -59,6 +59,7 @@ public class AddressHelper extends HelperBase{
         type(By.name("middlename"), address.middle());
         type(By.name("lastname"), address.last());
         type(By.name("nickname"), address.nick());
+        attach(By.name("photo"), address.photo());
     }
     private void photoForm() {
         {
@@ -136,8 +137,8 @@ public class AddressHelper extends HelperBase{
     public List<AddressData> getList() {
         openAddressPage();
         var address = new ArrayList<AddressData>();
-        var tds = manager.driver.findElements(By.xpath("//tr[@name=\'entry\']"));
-        for (var td : tds) {
+        var trs = manager.driver.findElements(By.xpath("//tr[@name=\'entry\']"));
+        for (var td : trs) {
             //var last = td.getText();
             //var first = td.getText();
             //var last = td.findElement(By.cssSelector("tr.td[2]")).getText();

@@ -3,6 +3,8 @@ package manager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
+import java.nio.file.Paths;
+
 public class HelperBase {
     protected final ApplicationManager manager;
 
@@ -31,5 +33,7 @@ public class HelperBase {
         WebElement dropdown = manager.driver.findElement(locator);
         dropdown.findElement(xpath).click();//By.xpath("//option[. = 'April']")
     }*/
-
+    protected void attach(By locator, String file) {
+        manager.driver.findElement(locator).sendKeys(Paths.get(file).toAbsolutePath().toString());
+    }
 }

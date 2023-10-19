@@ -3,29 +3,33 @@ package test;
 import manager.ApplicationManager;
 import org.junit.jupiter.api.BeforeEach;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.file.Paths;
+import java.util.Properties;
 import java.util.Random;
 
 public class TestBase {
     protected static ApplicationManager app;
 
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws IOException {
         if (app == null) {
+            var properties = new Properties();
+            properties.load(new FileReader(System.getProperty("target","local.properties")));
             app = new ApplicationManager();
+            app.init(System.getProperty("browser","firefox"), properties);
         }
-        app.init(System.getProperty("browser","firefox"));
     }
 
-    public static String randomString(int n) {
+    public static String randomFile(String dir) {
+        var fileNames = new File(dir).list();
         var rnd = new Random();
-        var result = "";
-        for (int i = 0; i < n; i++) {
-            result = result + (char)('a' + rnd.nextInt(26));
-        }
-        /*if (n < 20) {
-            result = result + '\'';
-        }*/
-        return result;
+        var index = rnd.nextInt(fileNames.length);
+        return Paths.get(dir, fileNames[index]).toString();
     }
+
 
 }
