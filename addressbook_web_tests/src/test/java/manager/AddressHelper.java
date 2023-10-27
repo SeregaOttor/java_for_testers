@@ -4,6 +4,7 @@ import model.AddressData;
 import model.GroupData;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.Select;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,59 @@ public class AddressHelper extends HelperBase{
         returnToAddressPage();
         //manager.driver.findElement(By.linkText("Logout")).click();
     }
+    public void createAddress(AddressData address,GroupData group) {
+        initAddressCreation();
+        nameForm(address);
+        //photoForm(); //не работает без подготовленного файла
+        titleForm();
+        telephoneForm();
+        eMailForm();
+        birthdayForm();
+        //groupForm();
+        selectGroup(group);
+        secondaryForm();
+        submitAddressCreation();
+        returnToAddressPage();
+        //manager.driver.findElement(By.linkText("Logout")).click();
+    }
+    public void createAddressNotGroup(AddressData address,GroupData group) {
+        initAddressCreation();
+        nameForm(address);
+        groupForm();
+        submitAddressCreation();
+        returnToAddressPage();
+        selectAddress(address);
+        addToGroup(group);
+        openAddressPage();
+    }
+    public void removeAddressFromGroup(AddressData address,GroupData group) {
+        openAddressPage();
+        chooseGroup(group);
+        selectAddress(address);
+        removeFromGroup();
+
+    }
+
+    private void removeFromGroup() {
+        manager.driver.findElement(By.name("remove")).click();
+        manager.driver.findElement(By.id("logo")).click();
+    }
+
+    private void chooseGroup(GroupData group) {
+        new Select(manager.driver.findElement(By.name("group"))).selectByValue(group.id());
+        //ptype(By.name("group"),By.xpath("//option[. = 'groups name']"));
+    }
+
+    public void addToGroup(GroupData group) {
+        new Select(manager.driver.findElement(By.name("to_group"))).selectByValue(group.id());
+        //ptype(By.name("to_group"),By.xpath("//option[. = 'groups name']"));
+        manager.driver.findElement(By.name("add")).click();
+        openAddressPage();
+    }
+
+    private void selectGroup(GroupData group) {
+        new Select(manager.driver.findElement(By.name("new_group"))).selectByValue(group.id());
+    }
 
     public void removeAddress(AddressData address) {
         openAddressPage();
@@ -33,10 +87,10 @@ public class AddressHelper extends HelperBase{
         removeSelectedAddress();
     }
 
-    private void openAddressPage(){
+    public void openAddressPage(){
         click(By.linkText("home"));
     }
-    private void selectAddress(AddressData address) {
+    public void selectAddress(AddressData address) {
         //click(By.name("selected[]"));
         //manager.driver.findElement(By.xpath("//input[@title=\'Select (First name Last name)\']")).click();
         click(By.cssSelector(String.format("input[value='%s']", address.id())));

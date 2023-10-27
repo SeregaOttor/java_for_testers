@@ -1,14 +1,15 @@
-package test;
+package test.web;
 
 import model.GroupData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import test.TestBase;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class GroupRemovalTests extends TestBase{
+public class GroupRemovalTests extends TestBase {
     @Test
     public void canRemoveGroup() {
         if (app.groups().getCount() == 0){
