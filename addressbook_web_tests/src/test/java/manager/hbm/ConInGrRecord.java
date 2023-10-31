@@ -1,7 +1,5 @@
 package manager.hbm;
 
-
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -15,4 +13,13 @@ public class ConInGrRecord {
     @Id
     public int group_id;
 
+
+    public ConInGrRecord() {
+
+    }
+    public ConInGrRecord(int id, int group_id) {
+        this.id = id;
+        this.group_id = group_id;
+    }
 }
+

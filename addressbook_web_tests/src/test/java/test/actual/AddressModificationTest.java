@@ -1,4 +1,4 @@
-package test.bd;
+package test.actual;
 
 import model.AddressData;
 import model.GroupData;

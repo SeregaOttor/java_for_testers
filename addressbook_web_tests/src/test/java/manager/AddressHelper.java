@@ -35,23 +35,26 @@ public class AddressHelper extends HelperBase{
         telephoneForm();
         eMailForm();
         birthdayForm();
-        //groupForm();
+        groupForm();
         selectGroup(group);
         secondaryForm();
         submitAddressCreation();
         returnToAddressPage();
         //manager.driver.findElement(By.linkText("Logout")).click();
     }
-    public void createAddressNotGroup(AddressData address,GroupData group) {
+    public void createAddressNotGroup(AddressData address) {
         initAddressCreation();
         nameForm(address);
-        groupForm();
         submitAddressCreation();
         returnToAddressPage();
+    }
+    public void addAddressInGroup(AddressData address,GroupData group) {
+        openAddressPage();
         selectAddress(address);
         addToGroup(group);
         openAddressPage();
     }
+
     public void removeAddressFromGroup(AddressData address,GroupData group) {
         openAddressPage();
         chooseGroup(group);
@@ -88,7 +91,8 @@ public class AddressHelper extends HelperBase{
     }
 
     public void openAddressPage(){
-        click(By.linkText("home"));
+        manager.driver.findElement(By.id("logo")).click();
+        //click(By.linkText("home"));
     }
     public void selectAddress(AddressData address) {
         //click(By.name("selected[]"));

@@ -1,6 +1,5 @@
-package test.bd;
+package test.actual;
 
-import common.CommonFunctions;
 import model.AddressData;
 import model.GroupData;
 import org.junit.jupiter.api.Assertions;
@@ -31,17 +30,16 @@ public class AddressRemovalTests extends TestBase {
 
     @Test
     public void canRemoveAddressFromGroup() {
+        if (app.hbm().getContactInGroupCount() == 0) {
             if (app.hbm().getContactCount() == 0) {
                 if (app.hbm().getGroupCount() == 0) {
                     app.hbm().createGroup(new GroupData("", "groups name", "group header", "group footer"));
                 }
-                var group = app.hbm().getGroupList().get(0);
-                app.address().createAddressNotGroup(new AddressData("", "First name", "Middle name", "Last name", "Nickname", "src/test/resources/images/bzz.jpg"), group);
+                app.address().createAddressNotGroup(new AddressData("", "First name", "Middle name", "Last name", "Nickname", "src/test/resources/images/bzz.jpg"));
             }
-
+            app.address().addAddressInGroup(app.hbm().getContactList().get(0),app.hbm().getGroupList().get(0));
+        }
         var group = app.hbm().getGroupList().get(0);
-        app.address().selectAddress(app.hbm().getContactList().get(0));
-        app.address().addToGroup(group);
         var oldAddress = app.hbm().getContactInGroup(group);
         var rnd = new Random();
         var index = rnd.nextInt(oldAddress.size());

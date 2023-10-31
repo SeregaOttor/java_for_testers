@@ -1,4 +1,4 @@
-package test.bd;
+package test.actual;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;

@@ -1,4 +1,4 @@
-package test.web;
+package test.old;
 
 import model.GroupData;
 import org.junit.jupiter.api.Assertions;

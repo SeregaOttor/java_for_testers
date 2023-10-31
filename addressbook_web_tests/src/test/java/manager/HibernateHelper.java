@@ -1,5 +1,6 @@
 package manager;
 
+import manager.hbm.ConInGrRecord;
 import manager.hbm.ContactRecord;
 import manager.hbm.GroupRecord;
 import model.AddressData;
@@ -18,6 +19,7 @@ public class HibernateHelper extends HelperBase {
         super(manager);
 
         sessionFactory = new Configuration()
+                .addAnnotatedClass(ConInGrRecord.class)
                 .addAnnotatedClass(ContactRecord.class)
                 .addAnnotatedClass(GroupRecord.class)
                 .setProperty(AvailableSettings.URL, "jdbc:mysql://localhost/addressbook?zeroDateTimeBehavior=convertToNull")
@@ -72,9 +74,9 @@ public class HibernateHelper extends HelperBase {
             return convertContactList(session.get(GroupRecord.class, group.id()).contacts);
         });
     }
-    public List<AddressData> getContactInGroupCount(GroupData group) {
+    public long getContactInGroupCount() {
         return sessionFactory.fromSession(session -> {
-            return convertContactList(session.get(GroupRecord.class, group.id()).contacts);
+            return session.createQuery("select count(cigr.id) from ConInGrRecord cigr join ContactRecord cr on cigr.id = cr.id", long.class).getSingleResult();
         });
     }
 
@@ -105,9 +107,9 @@ public class HibernateHelper extends HelperBase {
     }
 
     public List<AddressData> getContactList() {
-        return convertContactList(sessionFactory.fromSession(session -> {
-            return session.createQuery("from ContactRecord", ContactRecord.class).list();
-        }));
+        return sessionFactory.fromSession(session -> {
+            return convertContactList(session.createQuery("from ContactRecord", ContactRecord.class).list());
+        });
     }
 
     public long getContactCount() {
