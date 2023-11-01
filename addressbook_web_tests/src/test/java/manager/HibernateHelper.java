@@ -74,11 +74,7 @@ public class HibernateHelper extends HelperBase {
             return convertContactList(session.get(GroupRecord.class, group.id()).contacts);
         });
     }
-    public long getContactInGroupCount() {
-        return sessionFactory.fromSession(session -> {
-            return session.createQuery("select count(cigr.id) from ConInGrRecord cigr join ContactRecord cr on cigr.id = cr.id", long.class).getSingleResult();
-        });
-    }
+
 
     //Contract
     static List<AddressData> convertContactList(List<ContactRecord> records) {
@@ -114,10 +110,24 @@ public class HibernateHelper extends HelperBase {
 
     public long getContactCount() {
         return sessionFactory.fromSession(session -> {
-            return session.createQuery("select count (*) from ContactRecord", long.class).getSingleResult();
+            return session.createQuery("select count(*) from ContactRecord", long.class).getSingleResult();
         });
     }
-
+    public long getContactInGroupCount() {
+        return sessionFactory.fromSession(session -> {
+            return session.createQuery("select count(cigr.id) from ConInGrRecord cigr join ContactRecord cr on cigr.id = cr.id", long.class).getSingleResult();
+        });
+    }
+    public long getContactNotInGroupCount() {
+        return sessionFactory.fromSession(session -> {
+            return session.createQuery("select count(ab.id) from ContactRecord ab left join ConInGrRecord aig on ab.id=aig.id WHERE aig.id is null", long.class).getSingleResult();
+        });
+    }
+    public List<AddressData> getContactNotInGroup() {
+        return sessionFactory.fromSession(session -> {
+            return convertContactList(session.createQuery("FROM ContactRecord ab left join ConInGrRecord aig on ab.id=aig.id WHERE aig.id is null", ContactRecord.class).list());
+        });
+    }
 
     public void createAddress(AddressData addressData) {
         sessionFactory.inSession(session -> {

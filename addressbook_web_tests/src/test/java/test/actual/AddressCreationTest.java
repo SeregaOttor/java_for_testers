@@ -88,26 +88,24 @@ public class AddressCreationTest extends TestBase {
     Assertions.assertEquals(addressCount, newAddressCount);
   }
 
-
-    @Test
-    void canCreateContactInGroup(){
-      var address = new AddressData()
-              .withFirst(CommonFunctions.randomString(10))
-              .withLast(CommonFunctions.randomString(10))
-              .withPhoto(randomFile("src/test/resources/images"));
-      if (app.hbm().getGroupCount() == 0){
+  @Test
+  void canCreateContactInGroup2(){
+    var address = new AddressData()
+            .withFirst(CommonFunctions.randomString(10))
+            .withLast(CommonFunctions.randomString(10))
+            .withPhoto(randomFile("src/test/resources/images"));
+    if (app.hbm().getContactNotInGroupCount() == 0) {
+      if (app.hbm().getGroupCount() == 0) {
         app.hbm().createGroup(new GroupData("", "groups name", "group header", "group footer"));
       }
-      var group = app.hbm().getGroupList().get(0);
-      var oldRelated = app.hbm().getContactInGroup(group);
       app.address().createAddressNotGroup(address);
-      var rnd = new Random();
-      var index = rnd.nextInt(app.hbm().getContactList().size());
-      app.address().addAddressInGroup(app.hbm().getContactList().get(index),group);
-      var newRelated = app.hbm().getContactInGroup(group);
-      Assertions.assertEquals(oldRelated.size() + 1, newRelated.size());
     }
-
-
+    var group = app.hbm().getGroupList().get(0);
+    var oldRelated = app.hbm().getContactInGroup(group);
+    var minid =app.hbm().getContactNotInGroup().get(0);
+    app.address().addAddressInGroup(minid,group);
+    var newRelated = app.hbm().getContactInGroup(group);
+    Assertions.assertEquals(oldRelated.size() + 1, newRelated.size());
+  }
 
 }
