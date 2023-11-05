@@ -1,19 +1,23 @@
 package manager;
 
-import model.AddressData;
+import model.ContactData;
 import model.GroupData;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class AddressHelper extends HelperBase{
     public AddressHelper(ApplicationManager manager){
         super(manager);
     }
-    public void createAddress(AddressData address) {
+    public void createAddress(ContactData address) {
         initAddressCreation();
         nameForm(address);
         //photoForm(); //не работает без подготовленного файла
@@ -27,7 +31,7 @@ public class AddressHelper extends HelperBase{
         returnToAddressPage();
         //manager.driver.findElement(By.linkText("Logout")).click();
     }
-    public void createAddress(AddressData address,GroupData group) {
+    public void createAddress(ContactData address, GroupData group) {
         initAddressCreation();
         nameForm(address);
         //photoForm(); //не работает без подготовленного файла
@@ -42,20 +46,20 @@ public class AddressHelper extends HelperBase{
         returnToAddressPage();
         //manager.driver.findElement(By.linkText("Logout")).click();
     }
-    public void createAddressNotGroup(AddressData address) {
+    public void createAddressNotGroup(ContactData address) {
         initAddressCreation();
         nameForm(address);
         submitAddressCreation();
         returnToAddressPage();
     }
-    public void addAddressInGroup(AddressData address,GroupData group) {
+    public void addAddressInGroup(ContactData address, GroupData group) {
         openAddressPage();
         selectAddress(address);
         addToGroup(group);
         openAddressPage();
     }
 
-    public void removeAddressFromGroup(AddressData address,GroupData group) {
+    public void removeAddressFromGroup(ContactData address, GroupData group) {
         openAddressPage();
         chooseGroup(group);
         selectAddress(address);
@@ -84,7 +88,7 @@ public class AddressHelper extends HelperBase{
         new Select(manager.driver.findElement(By.name("new_group"))).selectByValue(group.id());
     }
 
-    public void removeAddress(AddressData address) {
+    public void removeAddress(ContactData address) {
         openAddressPage();
         selectAddress(address);
         removeSelectedAddress();
@@ -94,7 +98,7 @@ public class AddressHelper extends HelperBase{
         manager.driver.findElement(By.id("logo")).click();
         //click(By.linkText("home"));
     }
-    public void selectAddress(AddressData address) {
+    public void selectAddress(ContactData address) {
         //click(By.name("selected[]"));
         //manager.driver.findElement(By.xpath("//input[@title=\'Select (First name Last name)\']")).click();
         click(By.cssSelector(String.format("input[value='%s']", address.id())));
@@ -112,7 +116,7 @@ public class AddressHelper extends HelperBase{
     private void initAddressCreation() {
         click(By.linkText("add new"));
     }
-    private void nameForm(AddressData address) {
+    private void nameForm(ContactData address) {
         type(By.name("firstname"), address.first());
         type(By.name("middlename"), address.middle());
         type(By.name("lastname"), address.last());
@@ -192,9 +196,9 @@ public class AddressHelper extends HelperBase{
         click(By.xpath("//input[@id=\'MassCB\']"));
     }
 
-    public List<AddressData> getList() {
+    public List<ContactData> getList() {
         openAddressPage();
-        var address = new ArrayList<AddressData>();
+        var address = new ArrayList<ContactData>();
         var trs = manager.driver.findElements(By.xpath("//tr[@name=\'entry\']"));
         for (var td : trs) {
             //var last = td.getText();
@@ -205,11 +209,11 @@ public class AddressHelper extends HelperBase{
             var id = chackbox.getAttribute("value");
             var last = td.findElement(By.xpath("td[2]")).getText();
             var first = td.findElement(By.xpath("td[3]")).getText();
-            address.add(new AddressData().withId(id).withLast(last).withFirst(first));
+            address.add(new ContactData().withId(id).withLast(last).withFirst(first));
         }
         return address;
     }
-    public void modifyAddress(AddressData address,AddressData modifiedAddress) {
+    public void modifyAddress(ContactData address, ContactData modifiedAddress) {
         openAddressPage();
         //selectAddress(address); не требуется так как едит не зависит от выбраной галки
         initAddressModification(address);
@@ -221,9 +225,45 @@ public class AddressHelper extends HelperBase{
     private void submitAddressModification() {
         click(By.name("update"));
     }
-    private void initAddressModification(AddressData address) {
+    private void initAddressModification(ContactData address) {
         click(By.cssSelector(String.format("a[href=\'edit.php?id=%s\']", address.id())));
         //click(By.xpath("//img[@title=\'Edit\']"));
+    }
+
+    public String getPhones(ContactData contact) {
+        return manager.driver.findElement(By.xpath(
+                String.format("//input[@id='%s']/../../td[6]", contact.id())
+                )).getText();
+    }
+
+    public Map<String,String> getPhones() {
+        var result = new HashMap<String, String>();
+        List<WebElement> rows = manager.driver.findElements(By.name("entry"));
+        for (WebElement row: rows) {
+            var id = row.findElement(By.tagName("input")).getAttribute("id");
+            var phones = row.findElements(By.tagName("td")).get(5).getText();
+            result.put(id,phones);
+        }
+        return result;
+    }
+    public String getAddress(ContactData contact) {
+        return manager.driver.findElement(By.xpath(
+                String.format("//input[@id='%s']/../../td[4]", contact.id())
+        )).getText();
+    }
+    public String getEmail(ContactData contact) {
+        return manager.driver.findElement(By.xpath(
+                String.format("//input[@id='%s']/../../td[5]", contact.id())
+        )).getText();
+    }
+    public String getAddressPhoneEmail(ContactData contact) {
+        var addr = manager.driver.findElement(By.xpath(String.format("//input[@id='%s']/../../td[4]", contact.id()))).getText();
+        var email = manager.driver.findElement(By.xpath(String.format("//input[@id='%s']/../../td[5]", contact.id()))).getText();
+        var phone = manager.driver.findElement(By.xpath(String.format("//input[@id='%s']/../../td[6]", contact.id()))).getText();
+        var expected = Stream.of(addr,email,phone)
+                .filter(s -> s != null && ! "".equals(s))
+                .collect(Collectors.joining("\n"));
+        return expected;
     }
 }
 

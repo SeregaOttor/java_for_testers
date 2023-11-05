@@ -3,14 +3,14 @@ package manager;
 import manager.hbm.ConInGrRecord;
 import manager.hbm.ContactRecord;
 import manager.hbm.GroupRecord;
-import model.AddressData;
+import model.ContactData;
 import model.GroupData;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AvailableSettings;
 import org.hibernate.cfg.Configuration;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class HibernateHelper extends HelperBase {
     private SessionFactory sessionFactory;
@@ -30,11 +30,7 @@ public class HibernateHelper extends HelperBase {
 
 
     static List<GroupData> convertGroupList(List<GroupRecord> records) {
-        List<GroupData> result = new ArrayList<>();
-        for (var record : records) {
-            result.add(convert(record));
-        }
-        return result;
+        return records.stream().map(HibernateHelper::convert).collect(Collectors.toList());
     }
 
     private static GroupData convert(GroupRecord record) {
@@ -69,7 +65,7 @@ public class HibernateHelper extends HelperBase {
         });
 
     }
-    public List<AddressData> getContactInGroup(GroupData group) {
+    public List<ContactData> getContactInGroup(GroupData group) {
         return sessionFactory.fromSession(session -> {
             return convertContactList(session.get(GroupRecord.class, group.id()).contacts);
         });
@@ -77,24 +73,28 @@ public class HibernateHelper extends HelperBase {
 
 
     //Contract
-    static List<AddressData> convertContactList(List<ContactRecord> records) {
-        List<AddressData> result = new ArrayList<>();
-        for (var record : records) {
-            result.add(convert(record));
-        }
-        return result;
+    static List<ContactData> convertContactList(List<ContactRecord> records) {
+        return records.stream().map(HibernateHelper::convert).collect(Collectors.toList());
     }
 
-    private static AddressData convert(ContactRecord record) {
+    private static ContactData convert(ContactRecord record) {
         //return new AddressData("" + record.id, record.first, record.middle, record.last, record.nick);
-        return new AddressData().withId("" + record.id)
+        return new ContactData().withId("" + record.id)
                 .withFirst(record.first)
                 .withMiddle(record.middle)
                 .withLast(record.last)
-                .withNick(record.nick);
+                .withNick(record.nick)
+                .withAddress(record.address)
+                .withHome(record.home)
+                .withMobile(record.mobile)
+                .withWork(record.work)
+                .withSecondary(record.secondary)
+                .withEmail(record.email)
+                .withEmail2(record.email2)
+                .withEmail3(record.email3);
     }
 
-    private static ContactRecord convert(AddressData data) {
+    private static ContactRecord convert(ContactData data) {
         var id = data.id();
         if ("".equals(id)) {
             id = "0";
@@ -102,7 +102,7 @@ public class HibernateHelper extends HelperBase {
         return new ContactRecord(Integer.parseInt(id), data.first(), data.middle(), data.last(), data.nick());
     }
 
-    public List<AddressData> getContactList() {
+    public List<ContactData> getContactList() {
         return sessionFactory.fromSession(session -> {
             return convertContactList(session.createQuery("from ContactRecord", ContactRecord.class).list());
         });
@@ -123,13 +123,13 @@ public class HibernateHelper extends HelperBase {
             return session.createQuery("select count(ab.id) from ContactRecord ab left join ConInGrRecord aig on ab.id=aig.id WHERE aig.id is null", long.class).getSingleResult();
         });
     }
-    public List<AddressData> getContactNotInGroup() {
+    public List<ContactData> getContactNotInGroup() {
         return sessionFactory.fromSession(session -> {
             return convertContactList(session.createQuery("FROM ContactRecord ab left join ConInGrRecord aig on ab.id=aig.id WHERE aig.id is null", ContactRecord.class).list());
         });
     }
 
-    public void createAddress(AddressData addressData) {
+    public void createAddress(ContactData addressData) {
         sessionFactory.inSession(session -> {
             session.getTransaction().begin();
             session.persist(convert(addressData));

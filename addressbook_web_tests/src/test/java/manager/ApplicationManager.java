@@ -46,7 +46,7 @@ public class ApplicationManager {
         }
         return groups;
     }
-    public AddressHelper address() {
+    public AddressHelper contacts() {
         if (address == null) {
             address = new AddressHelper(this);
         }

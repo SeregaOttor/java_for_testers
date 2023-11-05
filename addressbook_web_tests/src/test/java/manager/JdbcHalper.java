@@ -1,6 +1,6 @@
 package manager;
 
-import model.AddressData;
+import model.ContactData;
 import model.GroupData;
 
 import java.sql.DriverManager;
@@ -34,14 +34,14 @@ public class JdbcHalper extends HelperBase{
     }
 
 
-    public List<AddressData> getContactList() {
-        var address = new ArrayList<AddressData>();
+    public List<ContactData> getContactList() {
+        var address = new ArrayList<ContactData>();
         try (var conn = DriverManager.getConnection("jdbc:mysql://localhost/addressbook","root", "");
              var statement = conn.createStatement();
              var result = statement.executeQuery("select id,firstname,middlename,lastname,nickname from addressbook"))
         {
             while (result.next()) {
-                address.add(new AddressData()
+                address.add(new ContactData()
                         .withId(result.getString("id"))
                         .withFirst(result.getString("firstname"))
                         .withMiddle(result.getString("middlename"))

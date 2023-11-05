@@ -23,6 +23,16 @@ public class ContactRecord {
     @Column(name = "nickname")
     public String nick;
 
+    public String address;
+    public String home;
+    public String mobile;
+    public String work;
+    @Column(name = "phone2")
+    public String secondary;
+
+    public String email;
+    public String email2;
+    public String email3;
 
 
     //public Date deprecated = new Date();
