@@ -7,6 +7,11 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class MantisHalper extends HelperBase{
     public MantisHalper(ApplicationManager manager) {
         super(manager);
@@ -31,6 +36,7 @@ public class MantisHalper extends HelperBase{
         type(By.name("password_confirm"), "password");
         click(By.cssSelector("button[type='submit']"));
     }
+
 
 
 }
