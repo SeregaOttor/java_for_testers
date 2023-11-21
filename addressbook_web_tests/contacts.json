@@ -4,19 +4,43 @@
   "middle" : "",
   "last" : "",
   "nick" : "",
-  "photo" : "src\\test\\resources\\images\\good.jpg"
+  "photo" : "src\\test\\resources\\images\\good.jpg",
+  "address" : "",
+  "home" : "",
+  "mobile" : "",
+  "work" : "",
+  "secondary" : "",
+  "email" : "",
+  "email2" : "",
+  "email3" : ""
 }, {
   "id" : "",
   "first" : "dpamvukpiy",
   "middle" : "rtmwkxdpfh",
   "last" : "jcrcxlxilt",
   "nick" : "jriuhtwoyf",
-  "photo" : "src\\test\\resources\\images\\good.jpg"
+  "photo" : "src\\test\\resources\\images\\good.jpg",
+  "address" : "",
+  "home" : "",
+  "mobile" : "",
+  "work" : "",
+  "secondary" : "",
+  "email" : "",
+  "email2" : "",
+  "email3" : ""
 }, {
   "id" : "",
   "first" : "lrzkoauncyrezqkeeato",
   "middle" : "ebhscugtzdiptgvlomoz",
   "last" : "txquzlafhknjwmytgkaj",
   "nick" : "gppvtdtonrkdufijqobk",
-  "photo" : "src\\test\\resources\\images\\good.jpg"
+  "photo" : "src\\test\\resources\\images\\good.jpg",
+  "address" : "",
+  "home" : "",
+  "mobile" : "",
+  "work" : "",
+  "secondary" : "",
+  "email" : "",
+  "email2" : "",
+  "email3" : ""
 } ]

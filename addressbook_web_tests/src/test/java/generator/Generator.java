@@ -80,8 +80,16 @@ public class Generator {
                     .withMiddle(CommonFunctions.randomString(10))
                     .withLast(CommonFunctions.randomString(10))
                     .withNick(CommonFunctions.randomString(10))
-                    .withPhoto(randomFile("src/test/resources/images"))
-                    //.withPhoto("src/test/resources/images/bzz.jpg")
+                    //.withPhoto(randomFile("src/test/resources/images"))
+                    .withPhoto("src/test/resources/images/bzz.jpg")
+                    .withAddress(CommonFunctions.randomString(10))
+                    .withHome(CommonFunctions.randomString(10))
+                    .withMobile(CommonFunctions.randomString(10))
+                    .withWork(CommonFunctions.randomString(10))
+                    .withSecondary(CommonFunctions.randomString(10))
+                    .withEmail(CommonFunctions.randomString(10))
+                    .withEmail2(CommonFunctions.randomString(10))
+                    .withEmail3(CommonFunctions.randomString(10))
             );
 
         }

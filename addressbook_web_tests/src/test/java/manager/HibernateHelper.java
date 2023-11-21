@@ -1,5 +1,6 @@
 package manager;
 
+import io.qameta.allure.Step;
 import manager.hbm.ConInGrRecord;
 import manager.hbm.ContactRecord;
 import manager.hbm.GroupRecord;
@@ -45,18 +46,22 @@ public class HibernateHelper extends HelperBase {
         return new GroupRecord(Integer.parseInt(id), data.name(), data.header(), data.footer());
     }
 
+
+    @Step
     public List<GroupData> getGroupList() {
         return convertGroupList(sessionFactory.fromSession(session -> {
             return session.createQuery("from GroupRecord", GroupRecord.class).list();
         }));
     }
 
+    @Step
     public long getGroupCount() {
         return sessionFactory.fromSession(session -> {
             return session.createQuery("select count (*) from GroupRecord", long.class).getSingleResult();
         });
     }
 
+    @Step
     public void createGroup(GroupData groupData) {
         sessionFactory.inSession(session -> {
             session.getTransaction().begin();
@@ -65,6 +70,7 @@ public class HibernateHelper extends HelperBase {
         });
 
     }
+    @Step
     public List<ContactData> getContactInGroup(GroupData group) {
         return sessionFactory.fromSession(session -> {
             return convertContactList(session.get(GroupRecord.class, group.id()).contacts);
@@ -101,13 +107,14 @@ public class HibernateHelper extends HelperBase {
         }
         return new ContactRecord(Integer.parseInt(id), data.first(), data.middle(), data.last(), data.nick());
     }
-
+    @Step
     public List<ContactData> getContactList() {
         return sessionFactory.fromSession(session -> {
             return convertContactList(session.createQuery("from ContactRecord", ContactRecord.class).list());
         });
     }
 
+    @Step
     public long getContactCount() {
         return sessionFactory.fromSession(session -> {
             return session.createQuery("select count(*) from ContactRecord", long.class).getSingleResult();

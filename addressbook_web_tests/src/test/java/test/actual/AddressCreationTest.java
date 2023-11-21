@@ -39,7 +39,28 @@ public class AddressCreationTest extends TestBase {
         for (var last : List.of("", "Last name")) {
           for (var nick : List.of("", "Nickname")) {
             for (var photo : List.of(randomFile("src/test/resources/images"))) {
-              result.add(new ContactData().withFirst(first).withMiddle(middle).withLast(last).withNick(nick).withPhoto(photo));
+              for (var address : List.of("Address")) {
+                for (var home : List.of("Home")) {
+                  for (var mobile : List.of("Mobile")) {
+                    for (var work : List.of("Work")) {
+                      for (var secondary : List.of("Home")) {
+                        for (var email : List.of("E-mail")) {
+                          for (var email2 : List.of("E-mail2")) {
+                            for (var email3 : List.of("E-mail3")) {
+                              result.add(new ContactData()
+                                      .withFirst(first).withMiddle(middle).withLast(last).withNick(nick)
+                                      .withPhoto(photo)
+                                      .withAddress(address)
+                                      .withHome(home).withMobile(mobile).withWork(work).withSecondary(secondary)
+                                      .withEmail(email).withEmail2(email2).withEmail3(email3));
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
             }
           }
         }

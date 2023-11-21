@@ -1,5 +1,6 @@
 package manager;
 
+import io.qameta.allure.Step;
 import model.ContactData;
 import model.GroupData;
 import org.openqa.selenium.By;
@@ -17,31 +18,33 @@ public class AddressHelper extends HelperBase{
     public AddressHelper(ApplicationManager manager){
         super(manager);
     }
+    @Step
     public void createAddress(ContactData address) {
         initAddressCreation();
         nameForm(address);
         //photoForm(); //не работает без подготовленного файла
-        titleForm();
-        telephoneForm();
-        eMailForm();
+        titleForm(address);
+        telephoneForm(address);
+        eMailForm(address);
         birthdayForm();
         groupForm();
-        secondaryForm();
+        secondaryForm(address);
         submitAddressCreation();
         returnToAddressPage();
         //manager.driver.findElement(By.linkText("Logout")).click();
     }
+    @Step
     public void createAddress(ContactData address, GroupData group) {
         initAddressCreation();
         nameForm(address);
         //photoForm(); //не работает без подготовленного файла
-        titleForm();
-        telephoneForm();
-        eMailForm();
+        titleForm(address);
+        telephoneForm(address);
+        eMailForm(address);
         birthdayForm();
         groupForm();
         selectGroup(group);
-        secondaryForm();
+        secondaryForm(address);
         submitAddressCreation();
         returnToAddressPage();
         //manager.driver.findElement(By.linkText("Logout")).click();
@@ -52,6 +55,7 @@ public class AddressHelper extends HelperBase{
         submitAddressCreation();
         returnToAddressPage();
     }
+    @Step
     public void addAddressInGroup(ContactData address, GroupData group) {
         openAddressPage();
         selectAddress(address);
@@ -59,6 +63,7 @@ public class AddressHelper extends HelperBase{
         openAddressPage();
     }
 
+    @Step
     public void removeAddressFromGroup(ContactData address, GroupData group) {
         openAddressPage();
         chooseGroup(group);
@@ -88,6 +93,7 @@ public class AddressHelper extends HelperBase{
         new Select(manager.driver.findElement(By.name("new_group"))).selectByValue(group.id());
     }
 
+    @Step
     public void removeAddress(ContactData address) {
         openAddressPage();
         selectAddress(address);
@@ -129,22 +135,22 @@ public class AddressHelper extends HelperBase{
             addFile.sendKeys("C:\\good.jpg");
         }
     }
-    private void titleForm() {
+    private void titleForm(ContactData address) {
         type(By.name("title"), "Title");
         type(By.name("company"), "Company");
-        type(By.name("address"), "Address");
+        type(By.name("address"), address.address());
     }
-    private void telephoneForm() {
-        type(By.name("home"), "Home");
-        type(By.name("mobile"), "Mobile");
-        type(By.name("work"), "Work");
+    private void telephoneForm(ContactData address) {
+        type(By.name("home"), address.home());
+        type(By.name("mobile"), address.mobile());
+        type(By.name("work"), address.work());
         type(By.name("fax"), "Fax");
     }
 
-    private void eMailForm() {
-        type(By.name("email"), "E-mail");
-        type(By.name("email2"), "E-mail2");
-        type(By.name("email3"), "E-mail3");
+    private void eMailForm(ContactData address) {
+        type(By.name("email"), address.email());
+        type(By.name("email2"), address.email2());
+        type(By.name("email3"), address.email3());
         type(By.name("homepage"), "Homepage");
     }
 
@@ -161,9 +167,9 @@ public class AddressHelper extends HelperBase{
         ptype(By.name("new_group"),By.xpath("//option[. = 'groups name']"));
         //driver.findElement(By.xpath("//option[contains(.,\'groups name\')]")).click();
     }
-    private void secondaryForm() {
+    private void secondaryForm(ContactData address) {
         type(By.name("address2"),"Address");
-        type(By.name("phone2"),"Home");
+        type(By.name("phone2"), address.secondary());
         type(By.name("notes"),"Notes");
     }
     private void submitAddressCreation() {
@@ -180,6 +186,7 @@ public class AddressHelper extends HelperBase{
         //return manager.driver.findElement(By.xpath("//span[@id="search_count"]"));
 
     }
+    @Step
     public void removeAllAddress() {
         openAddressPage();
         massSelectAddress();
@@ -213,6 +220,7 @@ public class AddressHelper extends HelperBase{
         }
         return address;
     }
+    @Step
     public void modifyAddress(ContactData address, ContactData modifiedAddress) {
         openAddressPage();
         //selectAddress(address); не требуется так как едит не зависит от выбраной галки
